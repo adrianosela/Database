@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"sync"
@@ -48,4 +49,23 @@ func NewControllerConfig(filename string) ControllerConfig {
 		ConfigFilename: filename,
 		PRIMap:         PRIMapObject,
 	}
+}
+
+func (c *Controller) AddTable(t *table.Table) error {
+	c.Lock()
+	defer c.Unlock()
+	c.Cache[t.Name] = t
+	c.Config.PRIMap[t.Name] = t.PrimaryKey
+
+	bytes, err := json.Marshal(&c.Config.PRIMap)
+	if err != nil {
+		return fmt.Errorf("[ERROR] Could not marshall config before writing to filesystem: %s", err)
+	}
+
+	//write to the config file
+	if err = ioutil.WriteFile(fmt.Sprintf("db/%s", c.Config.ConfigFilename), bytes, 0777); err != nil {
+		return fmt.Errorf("[ERROR] Could not update config on filesystem: %s", err)
+	}
+
+	return nil
 }

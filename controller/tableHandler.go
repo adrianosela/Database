@@ -42,12 +42,13 @@ func (c *Controller) CreateTableHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	c.Lock()
-	c.Cache[pl.Name] = t
-	c.Config.PRIMap[pl.Name] = pl.PrimaryKey //remember to solve writing to the config
-	c.Unlock()
-
+	c.AddTable(t)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(fmt.Sprintf("Table \"%s\" added to database with PRI \"%s\"", pl.Name, pl.PrimaryKey)))
+	return
+}
+
+func (c *Controller) GetTableHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO
 	return
 }
