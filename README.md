@@ -1,6 +1,6 @@
-##JSON Object NoSQL database container with a REST API
+## JSON Object NoSQL database container with a REST API
 
-###Features:
+### Features:
 
 * Create tables by specifiying a name for the table and the name of the primary key as it appears on the JSON object
 * Get a list of the database's tables
