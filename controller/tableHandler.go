@@ -10,8 +10,7 @@ import (
 )
 
 type CreateTablePayload struct {
-	Name       string `json:"name"`
-	PrimaryKey string `json:"key"`
+	Name string `json:"name"`
 }
 
 func (c *Controller) CreateTableHandler(w http.ResponseWriter, r *http.Request) {
@@ -29,13 +28,13 @@ func (c *Controller) CreateTableHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	if pl.Name == "" || pl.PrimaryKey == "" {
+	if pl.Name == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Missing mandatory field \"name\" or \"key\""))
+		w.Write([]byte("Missing mandatory field \"name\""))
 		return
 	}
 
-	t, err := table.NewTable(pl.Name, pl.PrimaryKey)
+	t, err := table.NewTable(pl.Name)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(fmt.Sprintf("Could not write table to file system: %s", err)))
@@ -44,7 +43,7 @@ func (c *Controller) CreateTableHandler(w http.ResponseWriter, r *http.Request) 
 
 	c.AddTable(t)
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(fmt.Sprintf("Table \"%s\" added to database with PRI \"%s\"", pl.Name, pl.PrimaryKey)))
+	w.Write([]byte(fmt.Sprintf("Table \"%s\" added to database", pl.Name)))
 	return
 }
 

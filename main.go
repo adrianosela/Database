@@ -8,6 +8,10 @@ import (
 	"github.com/adrianosela/Database/api"
 )
 
+var (
+	whatever = "somethig"
+)
+
 func main() {
 
 	//check the database directory is in place
