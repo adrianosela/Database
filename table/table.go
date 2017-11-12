@@ -1,15 +1,25 @@
 package table
 
-import "net/http"
+import (
+	"fmt"
+	"os"
+)
 
-func CreateTableHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO
+type Table struct {
+	Name       string                 `json:"name"`
+	PrimaryKey string                 `json:"PRI"`
+	Items      map[string]interface{} `json:"items,omitempty"`
 }
 
-func GetTableHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO
-}
+func NewTable(name, primaryKey string) (*Table, error) {
+	err := os.MkdirAll(fmt.Sprintf("./db/%s", name), 755)
+	if err != nil {
+		return nil, err
+	}
 
-func GetTablesHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	return &Table{
+		Name:       name,
+		PrimaryKey: primaryKey,
+		Items:      make(map[string]interface{}),
+	}, nil
 }
