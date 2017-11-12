@@ -6,4 +6,6 @@ ADD Database-linux /bin/Database-linux
 
 EXPOSE 80
 
+RUN mkdir db
+
 CMD ["/bin/Database-linux"]

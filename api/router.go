@@ -5,8 +5,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//GetKeystoreRouter returns the API's router
-func GetKeystoreRouter() *mux.Router {
+//GetDatabaseRouter returns the API's router
+func GetDatabaseRouter() *mux.Router {
 
 	router := mux.NewRouter()
 
