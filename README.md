@@ -1,11 +1,4 @@
-## JSON Object NoSQL database container with a REST API
+## JSON Object NoSQL Database Container
 
-### Features:
-
-* Create tables by specifiying a name for the table and the name of the primary key as it appears on the JSON object
-* Get a list of the database's tables
-* Delete tables by name
-* Get a table's contents by table name
-* Get an item within a table given the table name and primary key
-
-We take advantage of Golang's recursive datatype the map[string]interface{} which is the struct type of all JSON objects 
+A file system database with an in-memory cache and a RESP API for table/item management
+The database is capable of storning items of arbitrary format as long as they are valid JSON and include the string field "id" as part of the item. This field is intended to be the object's primary key within the table.
