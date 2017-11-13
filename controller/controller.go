@@ -9,10 +9,10 @@ import (
 	"github.com/adrianosela/Database/table"
 )
 
-type Controller struct {
+type DBController struct {
 	sync.RWMutex //inherit read/write lock behavior
 	Config       ControllerConfig
-	Cache        map[string]*table.Table
+	Tables       map[string]*table.Table
 }
 
 type ControllerConfig struct {
@@ -20,10 +20,10 @@ type ControllerConfig struct {
 	PRIMap         map[string]string
 }
 
-func NewController(config ControllerConfig) *Controller {
-	return &Controller{
+func NewDBController(config ControllerConfig) *DBController {
+	return &DBController{
 		Config: config,
-		Cache:  make(map[string]*table.Table),
+		Tables: make(map[string]*table.Table),
 	}
 }
 
@@ -46,10 +46,4 @@ func NewControllerConfig(filename string) ControllerConfig {
 	return ControllerConfig{
 		ConfigFilename: filename,
 	}
-}
-
-func (c *Controller) AddTable(t *table.Table) {
-	c.Lock()
-	defer c.Unlock()
-	c.Cache[t.Name] = t
 }

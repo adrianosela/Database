@@ -6,10 +6,7 @@ import (
 	"net/http"
 
 	"github.com/adrianosela/Database/api"
-)
-
-var (
-	whatever = "somethig"
+	"github.com/adrianosela/Database/controller"
 )
 
 func main() {
@@ -20,7 +17,10 @@ func main() {
 		log.Fatalf("Could not read db directory. %s", err)
 	}
 
-	router := api.GetDatabaseRouter()
+	config := controller.NewControllerConfig("./db/config")
+	ctrl := controller.NewDBController(config)
+
+	router := api.GetDatabaseRouter(ctrl)
 
 	log.Println("[INFO] Listening on http://localhost:80")
 

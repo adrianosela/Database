@@ -13,7 +13,7 @@ type CreateTablePayload struct {
 	Name string `json:"name"`
 }
 
-func (c *Controller) CreateTableHandler(w http.ResponseWriter, r *http.Request) {
+func (c *DBController) CreateTableHandler(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -47,7 +47,17 @@ func (c *Controller) CreateTableHandler(w http.ResponseWriter, r *http.Request) 
 	return
 }
 
-func (c *Controller) GetTableHandler(w http.ResponseWriter, r *http.Request) {
+func (c *DBController) GetTableHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO
+	return
+}
+
+func (c *DBController) GetTablesHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO
+	return
+}
+
+func (c *DBController) DeleteTableHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO
 	return
 }
