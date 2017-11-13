@@ -17,9 +17,7 @@ func main() {
 		log.Fatalf("Could not read db directory. %s", err)
 	}
 
-	config := controller.NewControllerConfig("./db/config")
-	ctrl := controller.NewDBController(config)
-
+	ctrl := controller.NewDBController()
 	router := api.GetDatabaseRouter(ctrl)
 
 	log.Println("[INFO] Listening on http://localhost:80")

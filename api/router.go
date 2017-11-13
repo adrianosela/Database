@@ -19,6 +19,7 @@ func GetDatabaseRouter(ctrl *controller.DBController) *mux.Router {
 	//item operations
 	router.Methods("POST").Path("/item/{table_name}").HandlerFunc(ctrl.AddItemHandler)
 	router.Methods("DELETE").Path("/item/{table_name}/{id}").HandlerFunc(ctrl.DeleteItemHandler)
+	router.Methods("GET").Path("item/{table_name}/{id}").HandlerFunc(ctrl.GetItemHandler)
 
 	return router
 }
