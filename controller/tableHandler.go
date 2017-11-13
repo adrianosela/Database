@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/adrianosela/Database/table"
+	"github.com/gorilla/mux"
 )
 
 type CreateTablePayload struct {
@@ -48,16 +50,88 @@ func (c *DBController) CreateTableHandler(w http.ResponseWriter, r *http.Request
 }
 
 func (c *DBController) GetTableHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	varMap := mux.Vars(r)
+	tableName := varMap["table_name"]
+
+	//get files in table directory
+	files, err := ioutil.ReadDir(fmt.Sprintf("./db/%s", tableName))
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprint(w, fmt.Sprintf("Table \"%s\" not found", tableName))
+		return
+	}
+
+	response := &struct {
+		Objects []string `json:"objects"`
+	}{
+		Objects: []string{},
+	}
+
+	for _, f := range files {
+		response.Objects = append(response.Objects, f.Name())
+	}
+
+	respBytes, err := json.Marshal(response)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Could not marshall response"))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(respBytes)
 	return
 }
 
 func (c *DBController) GetTablesHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	files, err := ioutil.ReadDir("./db")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, []byte("Could not read tables directory"))
+		return
+	}
+
+	response := &struct {
+		Tables []string `json:"tables"`
+	}{
+		Tables: []string{},
+	}
+
+	for _, f := range files {
+		response.Tables = append(response.Tables, f.Name())
+	}
+
+	respBytes, err := json.Marshal(response)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Could not marshall response"))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(respBytes)
 	return
 }
 
 func (c *DBController) DeleteTableHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	varMap := mux.Vars(r)
+	tableName := varMap["table_name"]
+
+	//Check can read table directory
+	_, err := ioutil.ReadDir(fmt.Sprintf("./db/%s", tableName))
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprint(w, fmt.Sprintf("Table \"%s\" not found", tableName))
+		return
+	}
+
+	if err = os.RemoveAll(fmt.Sprintf("./db/%s", tableName)); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, fmt.Sprintf("Table \"%s\" could not be deleted", tableName))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, fmt.Sprintf("Table \"%s\" successfully deleted", tableName))
 	return
 }
