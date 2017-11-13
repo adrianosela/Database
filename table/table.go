@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"sync"
 )
@@ -32,7 +31,6 @@ func NewTable(name string) (*Table, error) {
 func (t *Table) AddItem(JSONitem map[string]interface{}) error {
 	if id, ok := JSONitem["id"]; ok {
 		if idStr, ok := id.(string); ok {
-			log.Printf("[DEBUG] found id in object %s\n", idStr)
 			t.Lock()
 			defer t.Unlock()
 			//TODO: evict from cache if n > SOME_THRESHOLD
